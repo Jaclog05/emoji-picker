@@ -2,26 +2,23 @@ import { data } from "../data";
 import { useState } from "react";
 
 export function EmojiPicker({ onEmojiClicked }) {
-  const [emojiList, setEmojiList] = useState(data);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const filteredEmojis = searchTerm.trim().length ? data.filter((emoji) =>
+    emoji.keywords.includes(searchTerm)
+  ) : data
 
   function handleChange(e) {
-    if (e.target.value.trim().length) {
-      const newEmojiList = data.filter((emoji) =>
-        emoji.keywords.includes(e.target.value)
-      );
-      setEmojiList(newEmojiList);
-    } else {
-      setEmojiList(data);
-    }
+    setSearchTerm(e.target.value);
   }
 
   return (
     <div className="w-full p-4 bg-black shadow-lg rounded-tl-lg rounded-bl-lg rounded-br-lg gap-3">
       {
-        emojiList.length ?
+        filteredEmojis.length ?
           <div className="grid grid-cols-6 gap-4 mb-3">
             {
-              emojiList.map((emoji) => {
+              filteredEmojis.map((emoji) => {
                 return (
                   <button
                     key={emoji.name}
