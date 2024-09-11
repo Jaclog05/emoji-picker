@@ -5,6 +5,7 @@ import { useState, useRef } from "react";
 
 export default function Home() {
   const [isDisplayed, setIsDisplayed] = useState(false);
+  const [inputValue, setInputValue] = useState("")
   const inputRef = useRef(null);
 
   function handleClick() {
@@ -13,11 +14,15 @@ export default function Home() {
   }
 
   function handleClickEmojiOption(emoji) {
-    inputRef.current.focus();
     const cursorPosition = inputRef.current.selectionStart;
-    const firstSection = inputRef.current.value.slice(0, cursorPosition);
-    const lastSection = inputRef.current.value.slice(cursorPosition);
-    inputRef.current.value = firstSection + emoji + lastSection;
+
+    const firstSection = inputValue.slice(0, cursorPosition);
+    const lastSection = inputValue.slice(cursorPosition);
+    const newInputValue = firstSection + emoji + lastSection;
+
+    setInputValue(newInputValue)
+
+    inputRef.current.focus();
     inputRef.current.selectionStart = firstSection.length;
     inputRef.current.selectionEnd = inputRef.current.selectionStart;
   }
@@ -31,6 +36,8 @@ export default function Home() {
           placeholder="Write something..."
           type="text"
           name="search"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
         />
         <button className={`flex-none rounded-tr-lg px-3 ${isDisplayed ? 'bg-black' : ''}` } onClick={handleClick}>
           😄
